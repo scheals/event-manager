@@ -7,12 +7,8 @@ def clean_zipcode(zipcode)
 end
 
 def clean_phone_number(number)
-  number = number.to_s.gsub('(', '').gsub(')', '').gsub('-', '').gsub(' ', '').gsub('.', '')
-  if number.length > 11
-    '0000000000'
-  elsif number.length < 10
-    '0000000000'
-  elsif number.length == 10
+  number = number.chars.select { |char| ('0'..'9').include?(char) }.join
+  if number.length == 10
     number
   elsif number.length == 11 && number.start_with?('1')
     number[1..10]
@@ -57,16 +53,16 @@ contents = CSV.open(
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
 
-# contents.each do |row|
-#   id = row[0]
-#   name = row[:first_name]
-#   zipcode = clean_zipcode(row[:zipcode])
-#   legislators = legislators_by_zipcode(zipcode)
+contents.each do |row|
+  id = row[0]
+  name = row[:first_name]
+  zipcode = clean_zipcode(row[:zipcode])
+  legislators = legislators_by_zipcode(zipcode)
 
-#   form_letter = erb_template.result(binding)
+  form_letter = erb_template.result(binding)
 
-#   save_thank_you_letter(id, form_letter)
-# end
+  save_thank_you_letter(id, form_letter)
+end
 
 contents.each do |row|
   id = row[0]
