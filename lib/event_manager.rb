@@ -33,7 +33,7 @@ def clean_zipcode(zipcode)
 end
 
 def clean_phone_number(number)
-  number = number.chars.select { |char| ('0'..'9').include?(char) }.join
+  number = number.to_s.chars.select { |char| ('0'..'9').include?(char) }.join
   if number.length == 10
     number
   elsif number.length == 11 && number.start_with?('1')
@@ -90,12 +90,12 @@ erb_template = ERB.new template_letter
 #   save_thank_you_letter(id, form_letter)
 # end
 
-# contents.each do |row|
-#   id = row[0]
-#   name = row[:first_name]
-#   phone_number = clean_phone_number(row[:homephone])
-#   print "#{id} #{name} #{phone_number}\n"
-# end
+contents.each do |row|
+  id = row[0]
+  name = row[:first_name]
+  phone_number = clean_phone_number(row[:homephone])
+  print "#{id} #{name} #{phone_number}\n"
+end
 
-p count_days(contents)
+# p count_days(contents)
 # p count_hours(contents)
